@@ -1,5 +1,7 @@
 package com.example.boilapi;
 
+import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContainerFactoryConfigurer;
+
 import java.util.Arrays;
 
 public class Boil_wyj {
@@ -92,7 +94,8 @@ public class Boil_wyj {
                 }
             }
         }
-        System.out.println(Arrays.deepToString(rozlorzenie));
+        System.out.println("rozlorzenie:" + Arrays.deepToString( rozlorzenie));
+
         while (true) {
 //Obliczanie równań liniowych;
 
@@ -105,29 +108,54 @@ public class Boil_wyj {
             beta[1] = null;
             beta[2] = null;
             beta[3] = null;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (rozlorzenie[i][j] != 0 && (alfa[i] == null || beta[j] == null)) {
-                        if (alfa[i] != null && beta[j] == null)
-                        {
-                            beta[j] = re_cen[i][j] - alfa[i];
+while(true) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (rozlorzenie[i][j] != 0 && (alfa[i] == null || beta[j] == null)) {
+                if (alfa[i] != null && beta[j] == null) {
+                    beta[j] = re_cen[i][j] - alfa[i];
 
-                        } else if (beta[j] != null && alfa[j] == null)
-                        {
-                            alfa[i] = re_cen[i][j] - beta[j];
-                        }
-                    }
+                } else if (beta[j] != null && alfa[i] == null) {
+                    alfa[i] = re_cen[i][j] - beta[j];
                 }
             }
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (rozlorzenie[i][j] != 0 && (alfa[i] == null && beta[j] == null))
-                    {
-                        beta[i] = re_cen[i][j];
-                        alfa[j] = 0;
-                    }
-                }
+
+        }
+    }
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (rozlorzenie[i][j] != 0 && (alfa[i] == null && beta[j] == null)) {
+                beta[j] = re_cen[i][j];
+                alfa[i] = 0;
+
             }
+            if (rozlorzenie[i][j] == 0 && (alfa[i] == null && beta[j] == null))
+            {
+                alfa[i] = 0;
+                beta[j] = 0;
+            }
+        }
+    }
+boolean meh = true;
+    for (int i = 0; i < 4; i++) {
+        if (beta[i] == null)
+            meh = false;
+
+    }
+    for (int j = 0; j < 3; j++) {
+        if (alfa[j] == null)
+            meh = false;
+
+    }
+
+    System.out.println("rozlorzenie:" + Arrays.deepToString(rozlorzenie));
+    System.out.println("Alfa" + Arrays.toString(alfa));
+    System.out.println("Beta" + Arrays.toString(beta));
+if (meh)
+{
+    break;
+}
+}
             System.out.println("Alfa" + Arrays.toString(alfa));
             System.out.println("Beta" + Arrays.toString(beta));
             //tabela sprawdzająca opłacalność
@@ -148,6 +176,7 @@ public class Boil_wyj {
                         if(tabela_oplacalnosci[i][j] > 0)//teraz trzeba znaleść pasujące elementy
                         {
                             xd = true;//potencjalna zamiana miejsc
+
                             for (int m = 0; m < 3; m++) {
                                 for (int n = 0; n < 4; n++) {
                                     if(tabela_oplacalnosci[i][n] == null && tabela_oplacalnosci[m][j] == null & tabela_oplacalnosci[m][n] == null)
@@ -158,6 +187,7 @@ public class Boil_wyj {
                                             rozlorzenie[m][j] += rozlorzenie[i][n];
                                             rozlorzenie[m][n] -= rozlorzenie[i][n];
                                             rozlorzenie[i][n] = 0;
+
                                         }
                                         else
                                         {
@@ -167,9 +197,13 @@ public class Boil_wyj {
                                             rozlorzenie[m][j] = 0;
 
                                         }
+
                                     }
+
                                 }
+
                             }
+
                         }
                     }
                 }
