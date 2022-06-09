@@ -13,10 +13,17 @@ public class BoilController {
         Boil_wyj response = new Boil_wyj(input.odbiorca, input.dostawca, input.ceny_transportu, input.ceny_zakupu, input.ceny_sprzedazy);
         return response;
     }
+
     @GetMapping("/message")
     public String message()
     {
 
         return "Pozdrawian Kamila";
+    }
+    @GetMapping("/error")
+    public int errorX()
+    {
+
+        return 1/0;
     }
 }
