@@ -18,12 +18,7 @@ public class BoilController {
     public String message()
     {
 
-        return "Pozdrawian Kamila";
+        return "Devopsy to bardzo fajny przedmiot";
     }
-    @GetMapping("/error")
-    public int errorX()
-    {
 
-        return 1/0;
-    }
 }
